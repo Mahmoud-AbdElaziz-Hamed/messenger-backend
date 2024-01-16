@@ -1,4 +1,4 @@
-class UserRepository {
+export class UserRepository {
   constructor() {
     this.users = [];
   }
@@ -16,10 +16,7 @@ class UserRepository {
     return this.users;
   }
 
-  findUser(username, password) {
-    return this.users.find(
-      (user) => user._userName === username && user._password === password
-    );
+  findUser(email) {
+    return this.users.find((user) => user.email === email);
   }
 }
-module.exports = UserRepository;

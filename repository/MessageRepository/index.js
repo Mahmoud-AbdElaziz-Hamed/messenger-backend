@@ -1,4 +1,4 @@
-class MessageRepository {
+export class MessageRepository {
   constructor() {
     this.messages = [];
   }
@@ -18,12 +18,13 @@ class MessageRepository {
 
   getMessagesBetweenUsers(senderId, receiverId) {
     const senderMessages = this.messages.filter(
-      (message) => (message.senderId = senderId)
+      (message) =>
+        message.senderId === senderId && message.receiverId === receiverId
     );
     const receiverMessages = this.messages.filter(
-      (message) => (message.receiverId = receiverId)
+      (message) =>
+        message.receiverId === senderId && message.senderId === receiverId
     );
     return [...senderMessages, ...receiverMessages];
   }
 }
-module.exports = MessageRepository;

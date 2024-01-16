@@ -1,4 +1,4 @@
-class Message {
+export class Message {
   constructor(id, body, senderId, receiverId, timeStamp) {
     this.id = id;
     this.body = body;
@@ -11,16 +11,16 @@ class Message {
     return this.id;
   }
 
-  setId(messageId) {
-    this.id = messageId;
+  setId(id) {
+    this.id = id;
   }
 
   getBody() {
     return this.body;
   }
 
-  setBody(messageBody) {
-    this.body = messageBody;
+  setBody(body) {
+    this.body = body;
   }
 
   getSenderId() {
@@ -47,4 +47,3 @@ class Message {
     this.timeStamp = messageTime;
   }
 }
-module.exports = Message;
