@@ -1,27 +1,29 @@
 class MessageRepository {
   constructor() {
-    this._Messages = [];
+    this.messages = [];
   }
 
-  postUser(User) {
-    this._Messages.push(User);
+  addMessage(message) {
+    this.messages.push(message);
   }
 
-  deleteUserById(messageId) {
-    this._Messages = this._Messages.filter(({ id }) => id !== messageId);
+  deleteMessageById(messageId) {
+    this.messages = this.messages.filter(({ id }) => id !== messageId);
+    return messageId;
   }
 
-  getAllUser() {
-    return this._Messages;
+  getAllMessages() {
+    return this.messages;
   }
 
-  getMessageBetweenUsers(senderId, receverId) {
-    senderMessages = this._Messages.filter(
+  getMessagesBetweenUsers(senderId, receiverId) {
+    const senderMessages = this.messages.filter(
       (message) => (message.senderId = senderId)
     );
-    receverMessages = this._Messages.filter(
-      (message) => (message.receverId = receverId)
+    const receiverMessages = this.messages.filter(
+      (message) => (message.receiverId = receiverId)
     );
-    return senderMessages, receverMessages;
+    return [...senderMessages, ...receiverMessages];
   }
 }
+module.exports = MessageRepository;

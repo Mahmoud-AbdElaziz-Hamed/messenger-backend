@@ -35,6 +35,7 @@ class User {
   }
 
   set password(newPassword) {
-    this._password = newPassword;
+    this.password = newPassword;
   }
 }
+module.exports = User;

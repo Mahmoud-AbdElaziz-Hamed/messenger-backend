@@ -1,49 +1,50 @@
 class Message {
-  constructor(id, body, senderId, receverId, timeStamp) {
-    this._id = id;
-    this._body = body;
-    this._senderId = senderId;
-    this._receverId = receverId;
-    this._timeStamp = timeStamp;
+  constructor(id, body, senderId, receiverId, timeStamp) {
+    this.id = id;
+    this.body = body;
+    this.senderId = senderId;
+    this.receiverId = receiverId;
+    this.timeStamp = timeStamp;
   }
 
   getId() {
-    return this._id;
+    return this.id;
   }
 
   setId(messageId) {
-    this._id = messageId;
+    this.id = messageId;
   }
 
   getBody() {
-    return this._body;
+    return this.body;
   }
 
   setBody(messageBody) {
-    this._body = messageBody;
+    this.body = messageBody;
   }
 
   getSenderId() {
-    return this._senderId;
+    return this.senderId;
   }
 
   setSenderId(senderId) {
-    this._senderId = senderId;
+    this.senderId = senderId;
   }
 
-  getReceverId() {
-    return this._receverId;
+  getreceiverId() {
+    return this.receiverId;
   }
 
-  setReceverId(receverId) {
-    this._receverId = receverId;
+  setreceiverId(receiverId) {
+    this.receiverId = receiverId;
   }
 
   getTimeStamp() {
-    return this._timeStamp;
+    return this.timeStamp;
   }
 
   setTimeStamp(messageTime) {
-    this._timeStamp = messageTime;
+    this.timeStamp = messageTime;
   }
 }
+module.exports = Message;
