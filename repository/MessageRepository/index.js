@@ -1,30 +1,29 @@
 export class MessageRepository {
   constructor() {
-    this.messages = [];
+    this._messages = [];
   }
 
   addMessage(message) {
-    this.messages.push(message);
+    this._messages.push(message);
   }
 
   deleteMessageById(messageId) {
-    this.messages = this.messages.filter(({ id }) => id !== messageId);
+    this._messages = this._messages.filter(({ id }) => id !== messageId);
     return messageId;
   }
 
-  getAllMessages() {
-    return this.messages;
+  get allMessages() {
+    return this._messages;
   }
 
-  getMessagesBetweenUsers(senderId, receiverId) {
-    const senderMessages = this.messages.filter(
+  getMessagesBetweenUsers(firstUserId, secondUserId) {
+    const allMessages = this._messages.filter(
       (message) =>
-        message.senderId === senderId && message.receiverId === receiverId
+        (message.senderId === firstUserId &&
+          message.receiverId === secondUserId) ||
+        (message.receiverId === firstUserId &&
+          message.senderId === secondUserId)
     );
-    const receiverMessages = this.messages.filter(
-      (message) =>
-        message.receiverId === senderId && message.senderId === receiverId
-    );
-    return [...senderMessages, ...receiverMessages];
+    return allMessages;
   }
 }

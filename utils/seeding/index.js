@@ -2,7 +2,7 @@ import { User } from "../../models/User/index.js";
 import { Message } from "../../models/Message/index.js";
 
 export function seed(users, messages) {
-  const mocUserData = [
+  const mockUserData = [
     {
       id: 1,
       username: "mahmoud",
@@ -23,12 +23,12 @@ export function seed(users, messages) {
     },
   ];
 
-  mocUserData.forEach(({ id, username, email, password }) => {
+  mockUserData.forEach(({ id, username, email, password }) => {
     const user = new User(id, username, email, password);
     users.addUser(user);
   });
 
-  const mocMessageData = [
+  const mockMessageData = [
     {
       id: 1,
       body: "hello yasser",
@@ -73,7 +73,7 @@ export function seed(users, messages) {
     },
   ];
 
-  mocMessageData.forEach(({ id, body, senderId, receiverId, timeStamp }) => {
+  mockMessageData.forEach(({ id, body, senderId, receiverId, timeStamp }) => {
     const message = new Message(id, body, senderId, receiverId, timeStamp);
     messages.addMessage(message);
   });

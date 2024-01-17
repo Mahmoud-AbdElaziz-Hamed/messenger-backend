@@ -1,5 +1,6 @@
 import express from "express";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 
 import { UserRepository } from "./repository/UserRepository/index.js";
 import { MessageRepository } from "./repository/MessageRepository/index.js";
@@ -7,37 +8,41 @@ import { seed } from "./utils/seeding/index.js";
 import { Message } from "./models/Message/index.js";
 import { getRandomId } from "./utils/getRandomId/index.js";
 
-const PORT = 3000;
-const SECRETKEY = "mahmoud";
-
+dotenv.config();
 const app = express();
+
+const SECRET_KEY = process.env.SECRET_KEY;
+const PORT = process.env.PORT;
 
 app.use(express.json());
 
-const users = new UserRepository();
-const messages = new MessageRepository();
+const userRepository = new UserRepository();
+const messageRepository = new MessageRepository();
 
-seed(users, messages);
+seed(userRepository, messageRepository);
 
 // *************Get all users API*****************
 
 app.get("/users", (req, res) => {
   res.send(
-    users.getAllUser().map(({ username, email }) => {
-      return [username, email];
+    userRepository.allUser.map(({ username, email }) => {
+      return { username, email };
     })
   );
 });
 
 // *************Get message between two users API*****************
 
-app.get("/messages/:senderId", (req, res) => {
-  const senderId = Number(req.params.senderId);
-  const { receiverId } = req.body;
-  const allMessages = messages.getMessagesBetweenUsers(senderId, receiverId);
+app.get("/messages", (req, res) => {
+  const token = req.headers.authenticated.replace("Bearer ", "");
+  const firstUserId = jwt.verify(token, SECRET_KEY).userId;
+  const { secondUserId } = req.body;
+  const allMessages = messageRepository.getMessagesBetweenUsers(
+    firstUserId,
+    secondUserId
+  );
   if (!allMessages)
-    res.status(401).json({ message: "There no message , Say hi !" });
-  console.log(allMessages);
+    res.status(204).json({ message: "There no message , Say hi !" });
   res.send(allMessages);
 });
 
@@ -45,7 +50,7 @@ app.get("/messages/:senderId", (req, res) => {
 
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
-  const user = users.findUser(email);
+  const user = userRepository.findUser(email);
 
   if (!user) {
     return res.status(401).json({ error: "User not found ,please singup" });
@@ -57,18 +62,18 @@ app.post("/login", (req, res) => {
     return res.status(401).json({ error: "Invalid credentials" });
 
   const token = jwt.sign(
-    { userId: user.id, userName: user.userName },
-    SECRETKEY
+    { userId: user.id, username: user.username },
+    SECRET_KEY
   );
   res.json({ token });
 });
 
 // *************Add new message API*****************
 
-app.post("/message/:senderId", (req, res) => {
-  console.log("this is param", req.params);
+app.post("/message", (req, res) => {
   const { body, receiverId } = req.body;
-  const senderId = Number(req.params.senderId);
+  const token = req.headers.authenticated.replace("Bearer ", "");
+  const senderId = jwt.verify(token, SECRET_KEY).userId;
   const newMessage = new Message(
     getRandomId(),
     body,
@@ -76,8 +81,7 @@ app.post("/message/:senderId", (req, res) => {
     receiverId,
     Date.now()
   );
-  messages.addMessage(newMessage);
-  console.log(messages);
+  messageRepository.addMessage(newMessage);
   res.json({ message: "message sent", newMessage });
 });
 

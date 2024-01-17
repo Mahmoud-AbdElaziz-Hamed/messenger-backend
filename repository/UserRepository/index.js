@@ -1,22 +1,22 @@
 export class UserRepository {
   constructor() {
-    this.users = [];
+    this._users = [];
   }
 
   addUser(user) {
-    this.users.push(user);
+    this._users.push(user);
   }
 
   deleteUserById(userId) {
-    this.users = this.users.filter(({ id }) => id !== userId);
+    this._users = this._users.filter(({ id }) => id !== userId);
     return userId;
   }
 
-  getAllUser() {
-    return this.users;
+  get allUser() {
+    return this._users;
   }
 
   findUser(email) {
-    return this.users.find((user) => user.email === email);
+    return this._users.find((user) => user.email === email);
   }
 }

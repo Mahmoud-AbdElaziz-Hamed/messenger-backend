@@ -1,40 +1,40 @@
 export class User {
   constructor(id, username, email, password) {
-    this.id = id;
-    this.username = username;
-    this.email = email;
-    this.password = password;
+    this._id = id;
+    this._username = username;
+    this._email = email;
+    this._password = password;
   }
 
-  getId() {
-    return this.id;
+  get id() {
+    return this._id;
   }
 
-  setId(newId) {
-    this.id = newId;
+  set id(id) {
+    this._id = id;
   }
 
-  getusername() {
-    return this.username;
+  get username() {
+    return this._username;
   }
 
-  setusername(newUsername) {
-    this.username = newUsername;
+  set username(username) {
+    this._username = username;
   }
 
-  getemail() {
-    return this.email;
+  get email() {
+    return this._email;
   }
 
-  setemail(newEmail) {
-    this.email = newEmail;
+  set email(email) {
+    this._email = email;
   }
 
-  getpassword() {
-    return this.password;
+  get password() {
+    return this._password;
   }
 
-  setpassword(newPassword) {
-    this.password = newPassword;
+  set password(password) {
+    this._password = password;
   }
 }
