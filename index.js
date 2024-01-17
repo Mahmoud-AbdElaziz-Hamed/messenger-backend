@@ -68,13 +68,13 @@ app.post("/login", (req, res) => {
 app.post("/message/:senderId", (req, res) => {
   console.log("this is param", req.params);
   const { body, receiverId } = req.body;
-  const senderId = req.params.senderId;
+  const senderId = Number(req.params.senderId);
   const newMessage = new Message(
     getRandomId(),
     body,
     senderId,
     receiverId,
-    date.now()
+    Date.now()
   );
   messages.addMessage(newMessage);
   console.log(messages);
