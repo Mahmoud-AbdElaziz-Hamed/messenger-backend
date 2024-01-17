@@ -1,21 +1,25 @@
+import express from "express";
+import jwt from "jsonwebtoken";
+
 import { UserRepository } from "./repository/UserRepository/index.js";
 import { MessageRepository } from "./repository/MessageRepository/index.js";
 import { seed } from "./utils/seeding/index.js";
 import { Message } from "./models/Message/index.js";
 import { getRandomId } from "./utils/getRandomId/index.js";
-import express from "express";
-import jwt from "jsonwebtoken";
-const app = express();
+
 const PORT = 3000;
+const SECRETKEY = "mahmoud";
+
+const app = express();
 
 app.use(express.json());
-
-const secretKey = "mahmoud";
 
 const users = new UserRepository();
 const messages = new MessageRepository();
 
 seed(users, messages);
+
+// *************Get all users API*****************
 
 app.get("/users", (req, res) => {
   res.send(
@@ -24,6 +28,20 @@ app.get("/users", (req, res) => {
     })
   );
 });
+
+// *************Get message between two users API*****************
+
+app.get("/messages/:senderId", (req, res) => {
+  const senderId = Number(req.params.senderId);
+  const { receiverId } = req.body;
+  const allMessages = messages.getMessagesBetweenUsers(senderId, receiverId);
+  if (!allMessages)
+    res.status(401).json({ message: "There no message , Say hi !" });
+  console.log(allMessages);
+  res.send(allMessages);
+});
+
+// *************Login API*****************
 
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
@@ -40,10 +58,12 @@ app.post("/login", (req, res) => {
 
   const token = jwt.sign(
     { userId: user.id, userName: user.userName },
-    secretKey
+    SECRETKEY
   );
   res.json({ token });
 });
+
+// *************Add new message API*****************
 
 app.post("/message/:senderId", (req, res) => {
   console.log("this is param", req.params);
@@ -54,21 +74,11 @@ app.post("/message/:senderId", (req, res) => {
     body,
     senderId,
     receiverId,
-    "1:41"
+    date.now()
   );
   messages.addMessage(newMessage);
   console.log(messages);
   res.json({ message: "message sent", newMessage });
-});
-
-app.get("/messages/:senderId", (req, res) => {
-  const senderId = Number(req.params.senderId);
-  const { receiverId } = req.body;
-  const allMessages = messages.getMessagesBetweenUsers(senderId, receiverId);
-  if (!allMessages)
-    res.status(401).json({ message: "there no message , Say hi !" });
-  console.log(allMessages);
-  res.send(allMessages);
 });
 
 app.listen(PORT, () => {
