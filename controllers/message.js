@@ -7,7 +7,7 @@ export class MessageControllers {
   constructor(messageRepository) {
     dotenv.config();
     this.SECRET_KEY = process.env.SECRET_KEY;
-    this._messageControllers = messageRepository;
+    this._messageRepository = messageRepository;
   }
 
   getMessagesBetweenTwoUser = (req, res) => {
@@ -15,7 +15,7 @@ export class MessageControllers {
       const token = req.headers.authenticated.replace("Bearer ", "");
       const firstUserId = jwt.verify(token, this.SECRET_KEY).userId;
       const { secondUserId } = req.body;
-      const allMessages = this._messageControllers.getMessagesBetweenUsers(
+      const allMessages = this._messageRepository.getMessagesBetweenUsers(
         firstUserId,
         secondUserId
       );
@@ -31,7 +31,7 @@ export class MessageControllers {
   addNewMessage = (req, res) => {
     const { body, receiverId } = req.body;
     const token = req.headers.authenticated.replace("Bearer ", "");
-    const senderId = jwt.verify(token, this.SECRET_KEY).userId;
+    const senderId = jwt.verify(token, this.SECRET_KEY).id;
     const newMessage = new Message(
       getRandomId(),
       body,
@@ -39,7 +39,7 @@ export class MessageControllers {
       receiverId,
       Date.now()
     );
-    this._messageControllers.addMessage(newMessage);
+    this._messageRepository.addMessage(newMessage);
     res.json({ message: "message sent", newMessage });
   };
 }

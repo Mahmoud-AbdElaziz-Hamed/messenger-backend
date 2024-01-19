@@ -1,12 +1,10 @@
 import express from "express";
 
-export const userRouter = express.Router();
-
-userRouter.get("/users", (req, res) => {
-  console.log(req);
-  const userControllers = req.userControllers;
-  userControllers.getAllUsers();
-});
-userRouter.post("/login", (req, res) => {
-  userControllers.userLogin();
-});
+const Router = express.Router();
+const userRouter = (userControllers) => {
+  Router.get("/users", (req, res) => {
+    res.send(userControllers.getAllUsers());
+  });
+  return Router;
+};
+export { userRouter };

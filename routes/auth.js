@@ -1,4 +1,10 @@
 import express from "express";
 
-export const authRouter = express.Router();
-authRouter.post("/login", userControllers.userLogin);
+const Router = express.Router();
+const authRouter = (userControllers) => {
+  Router.post("/login", (req, res) => {
+    res.json(userControllers.userLogin(req, res));
+  });
+  return Router;
+};
+export { authRouter };
