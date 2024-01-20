@@ -2,11 +2,11 @@ import express from "express";
 
 const Router = express.Router();
 const messageRouter = (messageControllers) => {
-  Router.get("/messages", (req, res) => {
-    messageControllers.getMessagesBetweenTwoUser(req, res);
+  Router.get("/message/:userId", (req, res) => {
+    res.send(messageControllers.getMessagesBetweenTwoUser(req, res));
   });
-  Router.post("/message", (req, res) => {
-    messageControllers.addNewMessage(req, res);
+  Router.post("/message/:userId", (req, res) => {
+    res.json(messageControllers.addNewMessage(req, res));
   });
   return Router;
 };

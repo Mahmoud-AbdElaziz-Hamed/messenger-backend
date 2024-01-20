@@ -1,45 +1,51 @@
-import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import { Message } from "../models/Message/index.js";
+import { Message } from "../models/message.js";
 import { getRandomId } from "../utils/getRandomId/index.js";
+import { getToken } from "../utils/getToken/index.js";
+import { verifyToken } from "../utils/verifyToken/index.js";
+
+dotenv.config();
+const SECRET_KEY = process.env.SECRET_KEY;
 
 export class MessageControllers {
   constructor(messageRepository) {
-    dotenv.config();
-    this.SECRET_KEY = process.env.SECRET_KEY;
     this._messageRepository = messageRepository;
   }
 
   getMessagesBetweenTwoUser = (req, res) => {
     try {
-      const token = req.headers.authenticated.replace("Bearer ", "");
-      const firstUserId = jwt.verify(token, this.SECRET_KEY).userId;
-      const { secondUserId } = req.body;
+      const token = getToken(req);
+      const firstUserId = verifyToken(token).id;
+      const secondUserId = Number(req.params.userId);
       const allMessages = this._messageRepository.getMessagesBetweenUsers(
         firstUserId,
         secondUserId
       );
-      if (!allMessages)
-        res.status(204).json({ message: "There no message , Say hi !" });
-      res.send(allMessages);
+      if (!allMessages || allMessages.length === 0)
+        throw new Error("(204) There no message , Say hi !");
+      return allMessages;
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "internal server error" });
+      return error.message;
     }
   };
 
   addNewMessage = (req, res) => {
-    const { body, receiverId } = req.body;
-    const token = req.headers.authenticated.replace("Bearer ", "");
-    const senderId = jwt.verify(token, this.SECRET_KEY).id;
-    const newMessage = new Message(
-      getRandomId(),
-      body,
-      senderId,
-      receiverId,
-      Date.now()
-    );
-    this._messageRepository.addMessage(newMessage);
-    res.json({ message: "message sent", newMessage });
+    try {
+      const { body } = req.body;
+      const receiverId = Number(req.params.userId);
+      const token = getToken(req);
+      const senderId = verifyToken(token).id;
+      const message = new Message(
+        getRandomId(),
+        body,
+        senderId,
+        receiverId,
+        Date.now()
+      );
+      this._messageRepository.addMessage(message);
+      return { message: "message sent", message };
+    } catch (error) {
+      return error.message;
+    }
   };
 }

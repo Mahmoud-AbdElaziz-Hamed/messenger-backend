@@ -12,10 +12,6 @@ export class MessageRepository {
     return messageId;
   }
 
-  get allMessages() {
-    return this._messages;
-  }
-
   getMessagesBetweenUsers(firstUserId, secondUserId) {
     const allMessages = this._messages.filter(
       (message) =>

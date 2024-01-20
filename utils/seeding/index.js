@@ -1,5 +1,5 @@
-import { User } from "../../models/User/index.js";
-import { Message } from "../../models/Message/index.js";
+import { User } from "../../models/user.js";
+import { Message } from "../../models/message.js";
 
 export function seed(users, messages) {
   const mockUserData = [
