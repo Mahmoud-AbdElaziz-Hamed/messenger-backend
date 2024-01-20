@@ -8,11 +8,19 @@ export class UserRepository {
   }
 
   deleteUserById(userId) {
-    this._users = this._users.filter(({ id }) => id !== userId);
-    return userId;
+    try {
+      const lengthBeforeDelete = this._users.lenght;
+      this._users = this._users.filter(({ id }) => id !== userId);
+      const lengthAfterDelete = this._users.lenght;
+      if (lengthBeforeDelete === lengthAfterDelete)
+        throw new Error("Invalid id ,there is no user has this id");
+      return userId;
+    } catch (error) {
+      return error.message;
+    }
   }
 
-  get allUser() {
+  getAllUser() {
     return this._users;
   }
 

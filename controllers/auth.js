@@ -1,5 +1,8 @@
 import jwt from "jsonwebtoken";
-const SECRET_KEY = process.env.SECRET_KEY;
+import dotenv from "dotenv";
+
+dotenv.config();
+export const SECRET_KEY = process.env.SECRET_KEY;
 
 export class AuthControllers {
   constructor(userRepository) {

@@ -1,11 +1,8 @@
-import dotenv from "dotenv";
 import { Message } from "../models/message.js";
 import { getRandomId } from "../utils/getRandomId/index.js";
 import { getToken } from "../utils/getToken/index.js";
 import { verifyToken } from "../utils/verifyToken/index.js";
-
-dotenv.config();
-const SECRET_KEY = process.env.SECRET_KEY;
+import { SECRET_KEY } from "./auth.js";
 
 export class MessageControllers {
   constructor(messageRepository) {
@@ -14,15 +11,14 @@ export class MessageControllers {
 
   getMessagesBetweenTwoUser = (req, res) => {
     try {
-      const token = getToken(req);
-      const firstUserId = verifyToken(token).id;
+      const token = getToken(req.headers.authorization);
+      const firstUserId = verifyToken(token, SECRET_KEY).id;
       const secondUserId = Number(req.params.userId);
       const allMessages = this._messageRepository.getMessagesBetweenUsers(
         firstUserId,
         secondUserId
       );
-      if (!allMessages || allMessages.length === 0)
-        throw new Error("(204) There no message , Say hi !");
+      if (!allMessages) throw new Error("(204) There no message , Say hi !");
       return allMessages;
     } catch (error) {
       return error.message;
@@ -33,8 +29,8 @@ export class MessageControllers {
     try {
       const { body } = req.body;
       const receiverId = Number(req.params.userId);
-      const token = getToken(req);
-      const senderId = verifyToken(token).id;
+      const token = getToken(req.headers.authorization);
+      const senderId = verifyToken(token, SECRET_KEY).id;
       const message = new Message(
         getRandomId(),
         body,
@@ -43,7 +39,7 @@ export class MessageControllers {
         Date.now()
       );
       this._messageRepository.addMessage(message);
-      return { message: "message sent", message };
+      return { message };
     } catch (error) {
       return error.message;
     }

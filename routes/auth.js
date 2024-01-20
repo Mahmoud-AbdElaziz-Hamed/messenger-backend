@@ -1,10 +1,10 @@
 import express from "express";
 
-const Router = express.Router();
+const router = express.Router();
 const authRouter = (authControllers) => {
-  Router.post("/login", (req, res) => {
+  router.post("/login", (req, res) => {
     res.json(authControllers.login(req, res));
   });
-  return Router;
+  return router;
 };
 export { authRouter };

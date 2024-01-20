@@ -1,5 +1,4 @@
 import express from "express";
-import dotenv from "dotenv";
 
 import { userRouter } from "./routes/user.js";
 import { authRouter } from "./routes/auth.js";
@@ -19,14 +18,13 @@ const messageControllers = new MessageControllers(messageRepository);
 const authControllers = new AuthControllers(userRepository);
 seed(userRepository, messageRepository);
 
-dotenv.config();
 const app = express();
 
 app.use(express.json());
 app.use("/", authRouter(authControllers));
 app.use("/", (req, res, next) => {
   try {
-    const token = getToken(req);
+    const token = getToken(req.headers.authorization);
     if (!token) {
       throw new Error("unauthorized");
     } else {

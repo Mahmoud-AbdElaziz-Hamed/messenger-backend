@@ -1,2 +1,2 @@
-export const getToken = (req) =>
-  req.headers.authorization?.replace("Bearer ", "");
+export const getToken = (authorization) =>
+  authorization?.replace("Bearer ", "");

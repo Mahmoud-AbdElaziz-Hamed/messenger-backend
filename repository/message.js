@@ -8,8 +8,16 @@ export class MessageRepository {
   }
 
   deleteMessageById(messageId) {
-    this._messages = this._messages.filter(({ id }) => id !== messageId);
-    return messageId;
+    try {
+      const lengthBeforeDelete = this._messages.lenght;
+      this._messages = this._messages.filter(({ id }) => id !== messageId);
+      const lengthAfterDelete = this._messages.lenght;
+      if (lengthBeforeDelete === lengthAfterDelete)
+        throw new Error("Invalid id ,there is no message has this id");
+      return messageId;
+    } catch (error) {
+      return error.message;
+    }
   }
 
   getMessagesBetweenUsers(firstUserId, secondUserId) {
