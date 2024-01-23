@@ -1,3 +1,5 @@
+import { NoContentError } from "../errors/NoContentError.js";
+import { UnauthorizedError } from "../errors/UnauthorizedError.js";
 import { Message } from "../models/message.js";
 import { getRandomId } from "../utils/getRandomId/index.js";
 import { getToken } from "../utils/getToken/index.js";
@@ -9,54 +11,44 @@ export class MessageControllers {
     this._messageRepository = messageRepository;
   }
 
-  getMessagesBetweenTwoUser = (req, res) => {
+  getMessagesBetweenTwoUser = (authorization, userId) => {
     try {
-      const token = getToken(req.headers.authorization);
-      const userData = verifyToken(token, SECRET_KEY);
+      const token = getToken(authorization);
       const firstUserId = verifyToken(token, SECRET_KEY).id;
-      const secondUserId = Number(req.params.userId);
-      if (!token) {
-        throw new Error("unauthorized", { statusCode: 401 });
-      } else if (userData.status) {
-        throw new Error("Invalid token", { statusCode: 401 });
-      } else {
-        const allMessages = this._messageRepository.getMessagesBetweenUsers(
-          firstUserId,
-          secondUserId
-        );
-        if (!allMessages)
-          throw new Error("No messages are found", { statusCode: 204 });
-        return allMessages;
-      }
+      const secondUserId = Number(userId);
+      if (!token) throw new UnauthorizedError("unauthorized", 401);
+      const allMessages = this._messageRepository.getMessagesBetweenUsers(
+        firstUserId,
+        secondUserId
+      );
+      if (!allMessages) throw new NoContentError("No messages are found", 204);
+      return allMessages;
     } catch (error) {
-      return error.message;
+      throw error;
     }
   };
 
-  addMessage = (req, res) => {
+  addMessage = (authorization, id, messageBody) => {
     try {
-      const { body } = req.body;
-      const receiverId = Number(req.params.userId);
-      const token = getToken(req.headers.authorization);
-      const userData = verifyToken(token, SECRET_KEY);
+      const { body } = messageBody;
+      const receiverId = id;
+      const token = getToken(authorization);
       const senderId = verifyToken(token, SECRET_KEY).id;
-      if (!token) {
-        throw new Error("unauthorized", { statusCode: 401 });
-      } else if (userData.status) {
-        throw new Error("Invalid token", { statusCode: 401 });
-      } else {
-        const message = new Message(
-          getRandomId(),
-          body,
-          senderId,
-          receiverId,
-          Date.now()
-        );
-        this._messageRepository.addMessage(message);
-        return { message };
-      }
+      if (!token) throw new UnauthorizedError("unauthorized", 401);
+      const message = new Message(
+        getRandomId(),
+        body,
+        senderId,
+        receiverId,
+        Date.now()
+      );
+      this._messageRepository.addMessage(message);
+      return { message };
     } catch (error) {
-      return error.message;
+      if (error.statusCode === 204) {
+        return [];
+      }
+      throw error;
     }
   };
 }

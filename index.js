@@ -12,6 +12,8 @@ import { AuthControllers } from "./controllers/auth.js";
 import { getToken } from "./utils/getToken/index.js";
 import { SECRET_KEY } from "./controllers/auth.js";
 import { verifyToken } from "./utils/verifyToken/index.js";
+import { UnauthorizedError } from "./errors/UnauthorizedError.js";
+import { UnauthenticatedError } from "./errors/UnauthenticatedError.js";
 
 const userRepository = new UserRepository();
 const messageRepository = new MessageRepository();
@@ -27,16 +29,12 @@ app.use("/", authRouter(authControllers));
 app.use("/", (req, res, next) => {
   try {
     const token = getToken(req.headers.authorization);
-    const userData = verifyToken(token, SECRET_KEY);
-    if (!token) {
-      throw new Error("unauthorized", { statusCode: 401 });
-    } else if (userData.status) {
-      throw new Error("Invalid token", { statusCode: 401 });
-    } else {
-      next();
-    }
+    if (!token) throw new UnauthorizedError("unauthorized", 401);
+    verifyToken(token, SECRET_KEY);
+    next();
   } catch (error) {
-    next(error.message);
+    res.status(error.statusCode).send(error.message);
+    next();
   }
 });
 app.use("/", userRouter(userControllers));
