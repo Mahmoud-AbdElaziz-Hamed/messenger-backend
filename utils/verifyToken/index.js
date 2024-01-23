@@ -1,5 +1,10 @@
 import jwt from "jsonwebtoken";
 
-export function verifyToken(token, SECRET_KEY) {
-  return jwt.verify(token, SECRET_KEY);
+export function verifyToken(token, secretKey) {
+  try {
+    const userData = jwt.verify(token, secretKey);
+    return userData;
+  } catch (error) {
+    return { status: true, message: error.message };
+  }
 }

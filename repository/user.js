@@ -9,9 +9,9 @@ export class UserRepository {
 
   deleteUserById(userId) {
     try {
-      const lengthBeforeDelete = this._users.lenght;
+      const lengthBeforeDelete = this._users.length;
       this._users = this._users.filter(({ id }) => id !== userId);
-      const lengthAfterDelete = this._users.lenght;
+      const lengthAfterDelete = this._users.length;
       if (lengthBeforeDelete === lengthAfterDelete)
         throw new Error("Invalid id ,there is no user has this id");
       return userId;

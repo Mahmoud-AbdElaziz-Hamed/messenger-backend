@@ -1,7 +1,7 @@
 {
   "name": "messenger-backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "This is the backend repository for a chat application.",
   "main": "index.js",
   "type": "module",
   "scripts": {

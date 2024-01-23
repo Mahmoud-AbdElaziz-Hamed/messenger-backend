@@ -10,14 +10,19 @@ export class UserControllers {
   getAllUsers = (req, res) => {
     try {
       const token = getToken(req.headers.authorization);
-      const verify = verifyToken(token, SECRET_KEY);
-      if (!verify) throw new Error("unauthorized");
-      const allUsers = this._userRepository
-        .getAllUser()
-        .map(({ username, email }) => {
-          return { username, email };
-        });
-      return allUsers;
+      const userData = verifyToken(token, SECRET_KEY);
+      if (!token) {
+        throw new Error("unauthorized", { statusCode: 401 });
+      } else if (userData.status) {
+        throw new Error("Invalid token", { statusCode: 401 });
+      } else {
+        const allUsers = this._userRepository
+          .getAllUser()
+          .map(({ username, email }) => {
+            return { username, email };
+          });
+        return allUsers;
+      }
     } catch (error) {
       return error.message;
     }

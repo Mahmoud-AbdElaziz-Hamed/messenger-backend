@@ -9,9 +9,9 @@ export class MessageRepository {
 
   deleteMessageById(messageId) {
     try {
-      const lengthBeforeDelete = this._messages.lenght;
+      const lengthBeforeDelete = this._messages.length;
       this._messages = this._messages.filter(({ id }) => id !== messageId);
-      const lengthAfterDelete = this._messages.lenght;
+      const lengthAfterDelete = this._messages.length;
       if (lengthBeforeDelete === lengthAfterDelete)
         throw new Error("Invalid id ,there is no message has this id");
       return messageId;

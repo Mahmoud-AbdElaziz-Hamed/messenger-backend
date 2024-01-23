@@ -12,34 +12,49 @@ export class MessageControllers {
   getMessagesBetweenTwoUser = (req, res) => {
     try {
       const token = getToken(req.headers.authorization);
+      const userData = verifyToken(token, SECRET_KEY);
       const firstUserId = verifyToken(token, SECRET_KEY).id;
       const secondUserId = Number(req.params.userId);
-      const allMessages = this._messageRepository.getMessagesBetweenUsers(
-        firstUserId,
-        secondUserId
-      );
-      if (!allMessages) throw new Error("(204) There no message , Say hi !");
-      return allMessages;
+      if (!token) {
+        throw new Error("unauthorized", { statusCode: 401 });
+      } else if (userData.status) {
+        throw new Error("Invalid token", { statusCode: 401 });
+      } else {
+        const allMessages = this._messageRepository.getMessagesBetweenUsers(
+          firstUserId,
+          secondUserId
+        );
+        if (!allMessages)
+          throw new Error("No messages are found", { statusCode: 204 });
+        return allMessages;
+      }
     } catch (error) {
       return error.message;
     }
   };
 
-  addNewMessage = (req, res) => {
+  addMessage = (req, res) => {
     try {
       const { body } = req.body;
       const receiverId = Number(req.params.userId);
       const token = getToken(req.headers.authorization);
+      const userData = verifyToken(token, SECRET_KEY);
       const senderId = verifyToken(token, SECRET_KEY).id;
-      const message = new Message(
-        getRandomId(),
-        body,
-        senderId,
-        receiverId,
-        Date.now()
-      );
-      this._messageRepository.addMessage(message);
-      return { message };
+      if (!token) {
+        throw new Error("unauthorized", { statusCode: 401 });
+      } else if (userData.status) {
+        throw new Error("Invalid token", { statusCode: 401 });
+      } else {
+        const message = new Message(
+          getRandomId(),
+          body,
+          senderId,
+          receiverId,
+          Date.now()
+        );
+        this._messageRepository.addMessage(message);
+        return { message };
+      }
     } catch (error) {
       return error.message;
     }

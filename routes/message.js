@@ -6,7 +6,7 @@ const messageRouter = (messageControllers) => {
     res.send(messageControllers.getMessagesBetweenTwoUser(req, res));
   });
   router.post("/message/:userId", (req, res) => {
-    res.json(messageControllers.addNewMessage(req, res));
+    res.json(messageControllers.addMessage(req, res));
   });
   return router;
 };
