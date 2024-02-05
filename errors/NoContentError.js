@@ -1,5 +1,7 @@
-class NoContentError extends Error {
-  constructor(message, statusCode) {
+import { BaseError } from "./BaseError.js";
+
+class NoContentError extends BaseError {
+  constructor(message = "There is no content", statusCode = 204) {
     super(message);
     this._statusCode = statusCode;
   }

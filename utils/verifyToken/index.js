@@ -6,6 +6,7 @@ export function verifyToken(token, secretKey) {
     const userData = jwt.verify(token, secretKey);
     return userData;
   } catch (error) {
-    throw new UnauthenticatedError(error.message, 401);
+    if (error.message === "jwt malformed") throw new UnauthenticatedError();
+    else throw new UnauthenticatedError(error.message);
   }
 }

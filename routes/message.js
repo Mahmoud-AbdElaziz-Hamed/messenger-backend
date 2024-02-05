@@ -4,9 +4,10 @@ const router = express.Router();
 const messageRouter = (messageControllers) => {
   router.get("/message/:userId", (req, res) => {
     try {
+      const firstUserId = res.locals.user;
       res.send(
         messageControllers.getMessagesBetweenTwoUser(
-          req.headers.authorization,
+          firstUserId,
           req.params.userId
         )
       );
@@ -16,9 +17,10 @@ const messageRouter = (messageControllers) => {
   });
   router.post("/message", (req, res) => {
     try {
+      const senderId = res.locals.user;
       res.json(
         messageControllers.addMessage(
-          req.headers.authorization,
+          senderId,
           req.body.receiverId,
           req.body.body
         )

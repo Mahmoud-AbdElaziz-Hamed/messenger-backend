@@ -1,5 +1,7 @@
-class UnauthenticatedError extends Error {
-  constructor(message, statusCode) {
+import { BaseError } from "./BaseError.js";
+
+class UnauthenticatedError extends BaseError {
+  constructor(message = "Unauthenticated", statusCode = 401) {
     super(message);
     this._statusCode = statusCode;
   }

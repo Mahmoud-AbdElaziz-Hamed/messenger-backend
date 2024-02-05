@@ -1,4 +1,5 @@
 import express from "express";
+import dotenv from "dotenv";
 
 import { userRouter } from "./routes/user.js";
 import { authRouter } from "./routes/auth.js";
@@ -13,7 +14,6 @@ import { getToken } from "./utils/getToken/index.js";
 import { SECRET_KEY } from "./controllers/auth.js";
 import { verifyToken } from "./utils/verifyToken/index.js";
 import { UnauthorizedError } from "./errors/UnauthorizedError.js";
-import { UnauthenticatedError } from "./errors/UnauthenticatedError.js";
 
 const userRepository = new UserRepository();
 const messageRepository = new MessageRepository();
@@ -22,6 +22,8 @@ const messageControllers = new MessageControllers(messageRepository);
 const authControllers = new AuthControllers(userRepository);
 seed(userRepository, messageRepository);
 
+dotenv.config();
+const PORT = process.env.PORT || 3000;
 const app = express();
 
 app.use(express.json());
@@ -29,18 +31,16 @@ app.use("/", authRouter(authControllers));
 app.use("/", (req, res, next) => {
   try {
     const token = getToken(req.headers.authorization);
-    if (!token) throw new UnauthorizedError("unauthorized", 401);
-    verifyToken(token, SECRET_KEY);
+    if (!token) throw new UnauthorizedError();
+    const userId = verifyToken(token, SECRET_KEY).id;
+    res.locals.user = userId;
     next();
   } catch (error) {
     res.status(error.statusCode).send(error.message);
-    next();
   }
 });
 app.use("/", userRouter(userControllers));
 app.use("/", messageRouter(messageControllers));
-
-const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);

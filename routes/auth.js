@@ -6,6 +6,7 @@ const authRouter = (authControllers) => {
     try {
       res.json(authControllers.login(req.body));
     } catch (error) {
+      console.log("this my error", error);
       res.status(error.statusCode).send(error.message);
     }
   });

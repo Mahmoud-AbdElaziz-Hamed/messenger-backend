@@ -13,14 +13,13 @@ export class AuthControllers {
   login = ({ email, password }) => {
     try {
       const user = this._userRepository.findUser(email);
-
       if (!user) {
-        throw new UnauthenticatedError("User not found, please signup", 401);
+        throw new UnauthenticatedError("User not found, please signup");
       }
 
       const isCorrectPassword = user.password === password;
       if (!isCorrectPassword)
-        throw new UnauthenticatedError("Invalid credentials", 401);
+        throw new UnauthenticatedError("Invalid credentials");
 
       const token = jwt.sign(
         { id: user.id, username: user.username },
