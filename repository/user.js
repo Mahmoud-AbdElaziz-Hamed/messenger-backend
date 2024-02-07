@@ -1,3 +1,5 @@
+import { UnauthenticatedError } from '../errors/UnauthenticatedError.js';
+
 export class UserRepository {
   constructor() {
     this._users = [];
@@ -12,8 +14,9 @@ export class UserRepository {
       const lengthBeforeDelete = this._users.length;
       this._users = this._users.filter(({ id }) => id !== userId);
       const lengthAfterDelete = this._users.length;
-      if (lengthBeforeDelete === lengthAfterDelete)
-        throw new Error("Invalid id ,there is no user has this id");
+      if (lengthBeforeDelete === lengthAfterDelete) {
+        throw new NotFoundError('Invalid id ,there is no user has this id');
+      }
       return userId;
     } catch (error) {
       return error.message;
@@ -24,7 +27,15 @@ export class UserRepository {
     return this._users;
   }
 
-  findUser(email) {
-    return this._users.find((user) => user.email === email);
+  findUserByEmail(email) {
+    try {
+      const user = this._users.find((user) => user.email === email);
+      if (!user) {
+        throw new UnauthenticatedError('User not found, please signup');
+      }
+      return user;
+    } catch (error) {
+      throw error;
+    }
   }
 }

@@ -1,13 +1,8 @@
-import { BaseError } from "./BaseError.js";
+import { BaseError } from './BaseError.js';
 
 class UnauthenticatedError extends BaseError {
-  constructor(message = "Unauthenticated", statusCode = 401) {
-    super(message);
-    this._statusCode = statusCode;
-  }
-
-  get statusCode() {
-    return this._statusCode;
+  constructor(message) {
+    super(message, 401);
   }
 }
 export { UnauthenticatedError };

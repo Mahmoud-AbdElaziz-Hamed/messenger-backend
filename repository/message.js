@@ -1,3 +1,6 @@
+import { NoContentError } from '../errors/NoContentError.js';
+import { NotFoundError } from '../errors/NotFoundError.js';
+
 export class MessageRepository {
   constructor() {
     this._messages = [];
@@ -12,8 +15,9 @@ export class MessageRepository {
       const lengthBeforeDelete = this._messages.length;
       this._messages = this._messages.filter(({ id }) => id !== messageId);
       const lengthAfterDelete = this._messages.length;
-      if (lengthBeforeDelete === lengthAfterDelete)
-        throw new Error("Invalid id ,there is no message has this id");
+      if (lengthBeforeDelete === lengthAfterDelete) {
+        throw new NotFoundError('Invalid id ,there is no message has this id');
+      }
       return messageId;
     } catch (error) {
       return error.message;
@@ -21,13 +25,20 @@ export class MessageRepository {
   }
 
   getMessagesBetweenUsers(firstUserId, secondUserId) {
-    const allMessages = this._messages.filter(
-      (message) =>
-        (message.senderId === firstUserId &&
-          message.receiverId === secondUserId) ||
-        (message.receiverId === firstUserId &&
-          message.senderId === secondUserId)
-    );
-    return allMessages;
+    try {
+      const allMessages = this._messages.filter(
+        (message) =>
+          (message.senderId === firstUserId &&
+            message.receiverId === secondUserId) ||
+          (message.receiverId === firstUserId &&
+            message.senderId === secondUserId)
+      );
+      if (allMessages.length === 0) {
+        throw new NoContentError('there is no messages');
+      }
+      return allMessages;
+    } catch (error) {
+      return error.message;
+    }
   }
 }

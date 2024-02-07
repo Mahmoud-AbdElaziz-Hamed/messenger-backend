@@ -1,10 +1,10 @@
-import express from "express";
+import express from 'express';
 
 const router = express.Router();
 const userRouter = (userControllers) => {
-  router.get("/users", (req, res) => {
+  router.get('/', (req, res) => {
     try {
-      res.json(userControllers.getAllUsers(req.headers.authorization));
+      res.json(userControllers.getAllUsers());
     } catch (error) {
       res.status(error.statusCode).send(error.message);
     }

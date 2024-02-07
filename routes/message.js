@@ -1,21 +1,21 @@
-import express from "express";
+import express from 'express';
 
 const router = express.Router();
 const messageRouter = (messageControllers) => {
-  router.get("/message/:userId", (req, res) => {
+  router.get('/:userId', (req, res) => {
     try {
       const firstUserId = res.locals.user;
       res.send(
         messageControllers.getMessagesBetweenTwoUser(
           firstUserId,
-          req.params.userId
+          Number(req.params.userId)
         )
       );
     } catch (error) {
       res.status(error.statusCode).send(error.message);
     }
   });
-  router.post("/message", (req, res) => {
+  router.post('/', (req, res) => {
     try {
       const senderId = res.locals.user;
       res.json(
