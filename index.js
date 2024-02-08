@@ -11,6 +11,7 @@ import { UserRepository } from './repository/user.js';
 import { MessageRepository } from './repository/message.js';
 import { AuthControllers } from './controllers/auth.js';
 import { isAuthenticated } from './middlewares/isAuthonticate.js';
+import { registerRouter } from './routes/register.js';
 
 const userRepository = new UserRepository();
 const messageRepository = new MessageRepository();
@@ -26,7 +27,8 @@ const app = express();
 
 app.use(express.json());
 app.use('/', authRouter(authControllers));
-app.use('/', isAuthenticated);
+app.use(registerRouter(userControllers));
+app.use(isAuthenticated);
 app.use('/user', userRouter(userControllers));
 app.use('/message', messageRouter(messageControllers));
 

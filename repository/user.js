@@ -19,7 +19,7 @@ export class UserRepository {
       }
       return userId;
     } catch (error) {
-      return error.message;
+      throw error;
     }
   }
 

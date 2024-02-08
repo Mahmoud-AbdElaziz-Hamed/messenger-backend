@@ -1,4 +1,3 @@
-import { NoContentError } from '../errors/NoContentError.js';
 import { NotFoundError } from '../errors/NotFoundError.js';
 
 export class MessageRepository {
@@ -34,7 +33,7 @@ export class MessageRepository {
             message.senderId === secondUserId)
       );
       if (allMessages.length === 0) {
-        throw new NoContentError('there is no messages');
+        return [];
       }
       return allMessages;
     } catch (error) {
