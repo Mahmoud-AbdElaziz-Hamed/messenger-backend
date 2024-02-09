@@ -1,4 +1,4 @@
-import { NotFoundError } from '../errors/NotFoundError.js';
+import { BadRequest } from '../errors/BadRequest.js';
 import { Message } from '../models/message.js';
 import { getRandomId } from '../utils/getRandomId/index.js';
 
@@ -10,7 +10,7 @@ export class MessageControllers {
   getMessagesBetweenTwoUser = (firstUserId, secondUserId) => {
     try {
       if (!firstUserId || !secondUserId) {
-        throw new NotFoundError(
+        throw new BadRequest(
           'Sender ID, receiver ID cannot be empty or undefined'
         );
       }
@@ -26,10 +26,8 @@ export class MessageControllers {
 
   addMessage = (senderId, receiverId, messageBody) => {
     try {
-      if (!senderId || !receiverId || !messageBody) {
-        throw new NotFoundError(
-          'Sender ID, receiver ID, or message body cannot be empty or undefined'
-        );
+      if (!receiverId || !messageBody) {
+        throw new BadRequest('receiver ID, or message body cannot be empty');
       }
       const message = new Message(
         getRandomId(),

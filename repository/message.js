@@ -19,7 +19,7 @@ export class MessageRepository {
       }
       return messageId;
     } catch (error) {
-      return error.message;
+      throw error;
     }
   }
 
@@ -37,7 +37,7 @@ export class MessageRepository {
       }
       return allMessages;
     } catch (error) {
-      return error.message;
+      throw error;
     }
   }
 }

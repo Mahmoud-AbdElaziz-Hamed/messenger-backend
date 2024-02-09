@@ -28,14 +28,7 @@ export class UserRepository {
   }
 
   findUserByEmail(email) {
-    try {
-      const user = this._users.find((user) => user.email === email);
-      if (!user) {
-        throw new UnauthenticatedError('User not found, please signup');
-      }
-      return user;
-    } catch (error) {
-      throw error;
-    }
+    const user = this._users.find((user) => user.email === email);
+    return user;
   }
 }
