@@ -8,14 +8,15 @@ const authRouter = (authControllers) => {
       const email = req.body.email;
       const password = req.body.password;
       const userId = authControllers.register(username, email, password);
-      res.json({ userId: userId });
+      res.json({ userId });
     } catch (error) {
       res.status(error.statusCode).send(error.message);
     }
   });
   router.post('/login', (req, res) => {
     try {
-      res.json(authControllers.login(req.body));
+      const token = authControllers.login(req.body);
+      res.json(token);
     } catch (error) {
       res.status(error.statusCode).send(error.message);
     }

@@ -6,9 +6,11 @@ const messageRouter = (messageControllers) => {
     try {
       const firstUserId = res.locals.userId;
       const secondUserId = Number(req.params.userId);
-      res.send(
-        messageControllers.getMessagesBetweenTwoUser(firstUserId, secondUserId)
+      const allMessages = messageControllers.getMessagesBetweenTwoUser(
+        firstUserId,
+        secondUserId
       );
+      res.send(allMessages);
     } catch (error) {
       res.status(error.statusCode).send(error.message);
     }

@@ -1,10 +1,10 @@
 export class UserControllers {
   constructor(userRepository) {
-    this._userRepository = userRepository;
+    this.userRepository = userRepository;
   }
 
   getAllUsers = () => {
-    const allUsers = this._userRepository
+    const allUsers = this.userRepository
       .getAllUser()
       .map(({ id, username, email }) => {
         return { id, username, email };

@@ -4,16 +4,19 @@ import { getRandomId } from '../utils/getRandomId/index.js';
 
 export class MessageControllers {
   constructor(messageRepository) {
-    this._messageRepository = messageRepository;
+    this.messageRepository = messageRepository;
   }
 
   getMessagesBetweenTwoUser = (firstUserId, secondUserId) => {
-    if (!firstUserId || !secondUserId) {
-      throw new BadRequest(
-        'Sender ID, receiver ID cannot be empty or undefined'
-      );
+    if (!firstUserId) {
+      throw new BadRequest('firstUserId cannot be empty');
     }
-    const allMessages = this._messageRepository.getMessagesBetweenUsers(
+
+    if (!secondUserId) {
+      throw new BadRequest('secondUserId cannot be empty');
+    }
+
+    const allMessages = this.messageRepository.getMessagesBetweenUsers(
       firstUserId,
       secondUserId
     );
@@ -21,9 +24,18 @@ export class MessageControllers {
   };
 
   addMessage = (senderId, receiverId, messageBody) => {
-    if (!receiverId || !messageBody) {
-      throw new BadRequest('receiver ID, or message body cannot be empty');
+    if (!senderId) {
+      throw new BadRequest('senderId cannot be empty');
     }
+
+    if (!receiverId) {
+      throw new BadRequest('receiverId cannot be empty');
+    }
+
+    if (!messageBody) {
+      throw new BadRequest('messageBody cannot be empty');
+    }
+
     const message = new Message(
       getRandomId(),
       messageBody,
@@ -31,7 +43,6 @@ export class MessageControllers {
       receiverId,
       Date.now()
     );
-    this._messageRepository.addMessage(message);
-    return { message };
+    this.messageRepository.addMessage(message);
   };
 }

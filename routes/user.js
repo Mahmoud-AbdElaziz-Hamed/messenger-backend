@@ -4,7 +4,8 @@ const router = express.Router();
 const userRouter = (userControllers) => {
   router.get('/', (req, res) => {
     try {
-      res.json(userControllers.getAllUsers());
+      const allUsers = userControllers.getAllUsers();
+      res.json(allUsers);
     } catch (error) {
       res.status(error.statusCode).send(error.message);
     }
