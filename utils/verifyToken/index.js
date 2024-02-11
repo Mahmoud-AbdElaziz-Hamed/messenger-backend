@@ -6,10 +6,8 @@ export function verifyToken(token, secretKey) {
     const userData = jwt.verify(token, secretKey);
     return userData;
   } catch (error) {
-    if (error.message === 'jwt malformed') {
-      throw new UnauthenticatedError('there is not token');
-    } else {
-      throw new UnauthenticatedError(error.message);
-    }
+    const errorMessage =
+      error.message === 'jwt malformed' ? 'there is not token' : error.message;
+    throw new UnauthenticatedError(errorMessage);
   }
 }

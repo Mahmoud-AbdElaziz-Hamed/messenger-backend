@@ -7,20 +7,17 @@ export class UserRepository {
 
   addUser(user) {
     this._users.push(user);
+    return user.id;
   }
 
   deleteUserById(userId) {
-    try {
-      const lengthBeforeDelete = this._users.length;
-      this._users = this._users.filter(({ id }) => id !== userId);
-      const lengthAfterDelete = this._users.length;
-      if (lengthBeforeDelete === lengthAfterDelete) {
-        throw new NotFoundError('Invalid id ,there is no user has this id');
-      }
-      return userId;
-    } catch (error) {
-      throw error;
+    const lengthBeforeDelete = this._users.length;
+    this._users = this._users.filter(({ id }) => id !== userId);
+    const lengthAfterDelete = this._users.length;
+    if (lengthBeforeDelete === lengthAfterDelete) {
+      throw new NotFoundError('Invalid id ,there is no user has this id');
     }
+    return userId;
   }
 
   getAllUser() {

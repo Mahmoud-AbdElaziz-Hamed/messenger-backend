@@ -5,11 +5,9 @@ const messageRouter = (messageControllers) => {
   router.get('/:userId', (req, res) => {
     try {
       const firstUserId = res.locals.userId;
+      const secondUserId = Number(req.params.userId);
       res.send(
-        messageControllers.getMessagesBetweenTwoUser(
-          firstUserId,
-          Number(req.params.userId)
-        )
+        messageControllers.getMessagesBetweenTwoUser(firstUserId, secondUserId)
       );
     } catch (error) {
       res.status(error.statusCode).send(error.message);
@@ -18,13 +16,10 @@ const messageRouter = (messageControllers) => {
   router.post('/', (req, res) => {
     try {
       const senderId = res.locals.userId;
-      res.json(
-        messageControllers.addMessage(
-          senderId,
-          req.body.receiverId,
-          req.body.body
-        )
-      );
+      const receiverId = req.body.receiverId;
+      const messageBody = req.body.body;
+      messageControllers.addMessage(senderId, receiverId, messageBody);
+      res.json({ status: 'ok' });
     } catch (error) {
       res.status(error.statusCode).send(error.message);
     }

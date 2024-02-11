@@ -11,7 +11,6 @@ import { UserRepository } from './repository/user.js';
 import { MessageRepository } from './repository/message.js';
 import { AuthControllers } from './controllers/auth.js';
 import { isAuthenticated } from './middlewares/isAuthenticated.js';
-import { registerRouter } from './routes/register.js';
 
 const userRepository = new UserRepository();
 const messageRepository = new MessageRepository();
@@ -26,7 +25,6 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 
 app.use(express.json());
-app.use('/signup', authRouter(authControllers));
 app.use('/', authRouter(authControllers));
 app.use(isAuthenticated);
 app.use('/user', userRouter(userControllers));

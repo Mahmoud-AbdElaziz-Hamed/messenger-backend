@@ -2,15 +2,13 @@ import express from 'express';
 
 const router = express.Router();
 const authRouter = (authControllers) => {
-  router.post('/', (req, res) => {
+  router.post('/signup', (req, res) => {
     try {
-      res.json(
-        authControllers.register(
-          req.body.username,
-          req.body.email,
-          req.body.password
-        )
-      );
+      const username = req.body.username;
+      const email = req.body.email;
+      const password = req.body.password;
+      const userId = authControllers.register(username, email, password);
+      res.json({ userId: userId });
     } catch (error) {
       res.status(error.statusCode).send(error.message);
     }
