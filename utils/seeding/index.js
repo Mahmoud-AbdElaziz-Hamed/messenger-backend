@@ -5,21 +5,21 @@ export function seed(users, messages) {
   const mockUserData = [
     {
       id: 1,
-      username: 'mahmoud',
+      username: 'mahmoud abd elaziz hamed',
       email: 'mahmoud@gmail.com',
-      password: '12345',
+      password: '12345678',
     },
     {
       id: 2,
-      username: 'yasser',
+      username: 'yasser elhenawy',
       email: 'yasser@gmail.com',
-      password: '123456',
+      password: '123456789',
     },
     {
       id: 3,
-      username: 'ahmed',
+      username: 'ahmed abd elaziz hamed',
       email: 'ahmed@gmail.com',
-      password: '123457',
+      password: '1234567899',
     },
   ];
 

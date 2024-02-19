@@ -37,7 +37,11 @@ export class AuthControllers {
 
     const user = new User(getRandomId(), username, email, password);
     const userId = this.userRepository.addUser(user);
-    return userId;
+    const token = jwt.sign(
+      { id: user.id, username: user.username },
+      SECRET_KEY
+    );
+    return { token, userId };
   };
 
   login = ({ email, password }) => {
@@ -61,11 +65,13 @@ export class AuthControllers {
       throw new UnauthenticatedError('Invalid credentials');
     }
 
+    const userId = user.id;
+
     const token = jwt.sign(
       { id: user.id, username: user.username },
       SECRET_KEY
     );
 
-    return { token };
+    return { token, userId };
   };
 }
