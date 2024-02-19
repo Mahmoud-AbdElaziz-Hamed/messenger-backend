@@ -15,8 +15,8 @@ const authRouter = (authControllers) => {
   });
   router.post('/login', (req, res) => {
     try {
-      const user = authControllers.login(req.body);
-      res.json(user);
+      const userData = authControllers.login(req.body);
+      res.json(userData);
     } catch (error) {
       res.status(error.statusCode).send(error.message);
     }
