@@ -20,8 +20,21 @@ const messageRouter = (messageControllers) => {
       const senderId = res.locals.userId;
       const receiverId = req.body.receiverId;
       const messageBody = req.body.body;
-      messageControllers.addMessage(senderId, receiverId, messageBody);
-      res.json({ status: 'ok' });
+      const message = messageControllers.addMessage(
+        senderId,
+        receiverId,
+        messageBody
+      );
+      res.json([
+        { status: 'ok' },
+        {
+          id: message.id,
+          body: message.body,
+          senderId: message.senderId,
+          receiverId: message.receiverId,
+          timestamp: message.timestamp,
+        },
+      ]);
     } catch (error) {
       res.status(error.statusCode).send(error.message);
     }
