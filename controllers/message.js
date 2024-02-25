@@ -44,5 +44,6 @@ export class MessageControllers {
       Date.now()
     );
     this.messageRepository.addMessage(message);
+    return message;
   };
 }
