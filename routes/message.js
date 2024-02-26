@@ -25,16 +25,16 @@ const messageRouter = (messageControllers) => {
         receiverId,
         messageBody
       );
-      res.json([
-        { status: 'ok' },
-        {
+      res.json({
+        status: 'ok',
+        message: {
           id: message.id,
           body: message.body,
           senderId: message.senderId,
           receiverId: message.receiverId,
           timestamp: message.timestamp,
         },
-      ]);
+      });
     } catch (error) {
       res.status(error.statusCode).send(error.message);
     }
