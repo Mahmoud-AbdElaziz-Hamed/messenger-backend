@@ -1,22 +1,24 @@
 class BaseError {
-  constructor(message, statusCode) {
+  private _message: string;
+  private _statusCode: number;
+  constructor(message: string, statusCode: number) {
     this._message = message;
     this._statusCode = statusCode;
   }
 
-  get message() {
+  get message(): string {
     return this._message;
   }
 
-  set message(message) {
+  set message(message: string) {
     this._message = message;
   }
 
-  get statusCode() {
+  get statusCode(): number {
     return this._statusCode;
   }
 
-  set statusCode(statusCode) {
+  set statusCode(statusCode: number) {
     this._statusCode = statusCode;
   }
 }

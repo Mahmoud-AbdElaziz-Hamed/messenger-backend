@@ -2,16 +2,16 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 
-import { userRouter } from './routes/user.js';
-import { authRouter } from './routes/auth.js';
-import { messageRouter } from './routes/message.js';
-import { seed } from './utils/seeding/index.js';
-import { UserControllers } from './controllers/user.js';
-import { MessageControllers } from './controllers/message.js';
-import { UserRepository } from './repository/user.js';
-import { MessageRepository } from './repository/message.js';
-import { AuthControllers } from './controllers/auth.js';
-import { isAuthenticated } from './middlewares/isAuthenticated.js';
+import { userRouter } from './routes/user';
+import { authRouter } from './routes/auth';
+import { messageRouter } from './routes/message';
+import { seed } from './utils/seeding/index';
+import { UserControllers } from './controllers/user';
+import { MessageControllers } from './controllers/message';
+import { UserRepository } from './repository/user';
+import { MessageRepository } from './repository/message';
+import { AuthControllers } from './controllers/auth';
+import { isAuthenticated } from './middlewares/isAuthenticated';
 
 const userRepository = new UserRepository();
 const messageRepository = new MessageRepository();
@@ -34,5 +34,5 @@ app.use('/user', userRouter(userControllers));
 app.use('/message', messageRouter(messageControllers));
 
 app.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}`);
+  console.log(`type script app listening on port ${PORT}`);
 });

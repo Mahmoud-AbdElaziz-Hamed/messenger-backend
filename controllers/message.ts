@@ -1,13 +1,19 @@
-import { BadRequest } from '../errors/BadRequest.js';
-import { Message } from '../models/message.js';
-import { getRandomId } from '../utils/getRandomId/index.js';
+import { BadRequest } from '../errors/BadRequest';
+import { Message } from '../models/message';
+import { MessageRepository } from '../repository/message';
+import { MessageData } from '../typs';
+import { getRandomId } from '../utils/getRandomId/index';
 
 export class MessageControllers {
-  constructor(messageRepository) {
+  messageRepository: MessageRepository;
+  constructor(messageRepository: MessageRepository) {
     this.messageRepository = messageRepository;
   }
 
-  getMessagesBetweenTwoUser = (firstUserId, secondUserId) => {
+  getMessagesBetweenTwoUser = (
+    firstUserId: number,
+    secondUserId: number
+  ): MessageData[] => {
     if (!firstUserId) {
       throw new BadRequest('firstUserId cannot be empty');
     }
@@ -23,7 +29,11 @@ export class MessageControllers {
     return allMessages;
   };
 
-  addMessage = (senderId, receiverId, messageBody) => {
+  addMessage = (
+    senderId: number,
+    receiverId: number,
+    messageBody: string
+  ): Message => {
     if (!senderId) {
       throw new BadRequest('senderId cannot be empty');
     }

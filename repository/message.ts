@@ -1,15 +1,17 @@
-import { BadRequest } from '../errors/BadRequest.js';
+import { BadRequest } from '../errors/BadRequest';
+import { Message } from '../models/message';
 
 export class MessageRepository {
+  messages: Message[];
   constructor() {
     this.messages = [];
   }
 
-  addMessage(message) {
+  addMessage(message: Message): void {
     this.messages.push(message);
   }
 
-  deleteMessageById(messageId) {
+  deleteMessageById(messageId: number): number {
     const lengthBeforeDelete = this.messages.length;
     this.messages = this.messages.filter(({ id }) => id !== messageId);
     const lengthAfterDelete = this.messages.length;
@@ -19,7 +21,16 @@ export class MessageRepository {
     return messageId;
   }
 
-  getMessagesBetweenUsers(firstUserId, secondUserId) {
+  getMessagesBetweenUsers(
+    firstUserId: number,
+    secondUserId: number
+  ): {
+    id: number;
+    body: string;
+    senderId: number;
+    receiverId: number;
+    timestamp: number;
+  }[] {
     const allMessages = this.messages
       .filter(
         (message) =>
