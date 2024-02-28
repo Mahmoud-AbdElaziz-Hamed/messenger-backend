@@ -1,7 +1,9 @@
-import { User } from '../../models/user.js';
-import { Message } from '../../models/message.js';
+import { User } from '../../models/user';
+import { Message } from '../../models/message';
+import { UserRepository } from '../../repository/user';
+import { MessageRepository } from '../../repository/message';
 
-export function seed(users, messages) {
+export function seed(users: UserRepository, messages: MessageRepository): void {
   const mockUserData = [
     {
       id: 1,
@@ -24,7 +26,7 @@ export function seed(users, messages) {
   ];
 
   mockUserData.forEach(({ id, username, email, password }) => {
-    const user = new User(id, username, email, password);
+    const user: User = new User(id, username, email, password, false);
     users.addUser(user);
   });
 

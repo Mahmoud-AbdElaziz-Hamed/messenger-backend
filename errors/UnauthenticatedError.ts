@@ -1,7 +1,7 @@
-import { BaseError } from './BaseError.js';
+import { BaseError } from './BaseError';
 
 class UnauthenticatedError extends BaseError {
-  constructor(message) {
+  constructor(message: string) {
     super(message, 401);
   }
 }
